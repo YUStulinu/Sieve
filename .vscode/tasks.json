@@ -1,0 +1,12 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    { "label": "fetch dependencies", "type": "shell", "command": "bash scripts/fetch-deps.sh", "problemMatcher": [] },
+    { "label": "test mail server (GreenMail)", "type": "shell", "command": "bash scripts/test-server.sh", "isBackground": true, "problemMatcher": [] },
+    { "label": "fill the test server with the demo mailbox", "type": "shell", "command": "eval/.venv/Scripts/python -m sieve_eval.demo", "options": { "cwd": "${workspaceFolder}/eval" }, "problemMatcher": [] },
+    { "label": "build (release)", "type": "shell", "command": "cargo build --release -p sieved", "group": "build", "problemMatcher": ["$rustc"] },
+    { "label": "Rust tests (with the test server)", "type": "shell", "command": "cargo test -p sieve-core -p sieved", "options": { "env": { "SIEVE_TEST_IMAP": "127.0.0.1:3143" } }, "group": "test", "problemMatcher": ["$rustc"] },
+    { "label": "eval tests", "type": "shell", "command": ".venv/Scripts/python -m pytest -q", "options": { "cwd": "${workspaceFolder}/eval" }, "group": "test", "problemMatcher": [] },
+    { "label": "app (dev)", "type": "shell", "command": "npx tauri dev", "options": { "cwd": "${workspaceFolder}/app" }, "problemMatcher": [] }
+  ]
+}

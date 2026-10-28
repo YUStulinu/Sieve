@@ -1,0 +1,16 @@
+# Built and downloaded
+/target/
+/third_party/
+app/node_modules/
+app/dist/
+app/src-tauri/gen/
+eval/.venv/
+eval/work/
+__pycache__/
+.pytest_cache/
+
+# Models and mail data never go in git
+*.gguf
+*.db
+*.db-wal
+*.db-shm

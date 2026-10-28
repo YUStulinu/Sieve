@@ -1,0 +1,24 @@
+[package]
+name = "sieve-app"
+description = "Sieve's desktop app"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[lib]
+name = "sieve_app"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+sieve-core = { path = "../../core/sieve-core" }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tauri = { version = "2", features = [] }
+
+[features]
+# Set by `tauri build`: the interface is served from the built files, not from the dev server.
+custom-protocol = ["tauri/custom-protocol"]

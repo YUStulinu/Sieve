@@ -1,0 +1,79 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  core:
+    # The daemon and its core: parsing, the store, triage/drafts/follow-ups with a scripted model, the
+    # local API — and the whole IMAP path against a real server (GreenMail).
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v5
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt
+      - uses: actions/cache@v5
+        with:
+          path: third_party/downloads
+          key: deps-${{ runner.os }}-${{ hashFiles('scripts/fetch-deps.sh') }}
+      - name: Format
+        run: cargo fmt --check -p sieve-core -p sieved
+      - name: The test mail server
+        run: |
+          set -o pipefail
+          bash scripts/fetch-deps.sh 2>&1 | tee deps.log || { echo "::error::$(tail -6 deps.log | tr '\n' ' ')"; exit 1; }
+          JAVA_HOME="$JAVA_HOME_21_X64" bash scripts/test-server.sh > greenmail.log 2>&1 &
+          for i in $(seq 1 60); do (echo > /dev/tcp/127.0.0.1/3143) 2>/dev/null && break; sleep 1; done
+      - name: Tests
+        env:
+          SIEVE_TEST_IMAP: 127.0.0.1:3143
+        run: cargo test -p sieve-core -p sieved
+      - name: The command line and the daemon build in release
+        run: cargo build --release -p sieved
+
+  eval:
+    # The evaluation harness's own code and the consistency of the labelled sets.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.14"
+      - run: pip install -r eval/requirements.txt
+      - name: Tests
+        working-directory: eval
+        run: python -m pytest -q
+
+  app:
+    # The desktop app: the interface type-checks and builds, and the Tauri shell compiles.
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Interface
+        working-directory: app
+        run: |
+          npm ci
+          npm run check
+          npm run build
+      - name: Tauri shell
+        working-directory: app
+        run: npx tauri build --no-bundle
+
+# The evaluations themselves (they need a GGUF model and the Enron shard) run locally:
+# see README.md, "Results".

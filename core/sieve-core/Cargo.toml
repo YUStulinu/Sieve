@@ -1,0 +1,27 @@
+[package]
+name = "sieve-core"
+description = "Sieve's core: IMAP sync, the local index, triage, summaries, drafts and follow-ups with a local model"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[dependencies]
+anyhow.workspace = true
+chrono.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+tracing.workspace = true
+imap = { version = "2.4.1", default-features = false }
+native-tls = "0.2"
+mail-parser = "1"
+mail-builder = "2"
+rusqlite = { version = "0.41", features = ["bundled"] }
+reqwest = { version = "0.13", default-features = false, features = ["json", "blocking"] }
+lettre = { version = "0.11", default-features = false, features = ["smtp-transport", "builder", "native-tls"] }
+regex = "1"
+directories = "6"
+keyring = { version = "3", features = ["windows-native", "apple-native", "sync-secret-service"] }
+
+[dev-dependencies]
+tempfile = "3"

@@ -1,0 +1,142 @@
+:root {
+  --bg: #f6f5f2;
+  --panel: #ffffff;
+  --sunk: #efede8;
+  --line: #e2dfd8;
+  --text: #1d1c1a;
+  --muted: #6b6760;
+  --faint: #9a958c;
+  --accent: #2f5d50;
+  --accent-soft: #e3ece8;
+  --today: #b4532a;
+  --today-soft: #f7e7dd;
+  --info: #3d5a80;
+  --info-soft: #e4eaf2;
+  --news: #6c5a8a;
+  --news-soft: #ece7f3;
+  --money: #7a6420;
+  --money-soft: #f3edda;
+  --danger: #a33a2c;
+  --radius: 8px;
+  font-family: 'Segoe UI Variable', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--text);
+  background: var(--bg);
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #161615;
+    --panel: #1f1e1c;
+    --sunk: #191817;
+    --line: #2f2d2a;
+    --text: #ece9e3;
+    --muted: #a39e94;
+    --faint: #77726a;
+    --accent: #7fb5a3;
+    --accent-soft: #233630;
+    --today: #e8946a;
+    --today-soft: #3a2519;
+    --info: #94acd0;
+    --info-soft: #1f2836;
+    --news: #b6a3d4;
+    --news-soft: #2a2335;
+    --money: #d4bb6b;
+    --money-soft: #332b14;
+    --danger: #e0786a;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  overflow: hidden;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  border-radius: 6px;
+  padding: 5px 12px;
+  cursor: pointer;
+}
+button:hover:not(:disabled) {
+  border-color: var(--faint);
+}
+button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+button.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--panel);
+}
+button.ghost {
+  border-color: transparent;
+  background: transparent;
+}
+button.danger {
+  color: var(--danger);
+}
+
+input,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 6px 9px;
+}
+input:focus,
+textarea:focus,
+select:focus,
+button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.pill {
+  display: inline-block;
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 1px 8px;
+  border-radius: 99px;
+  white-space: nowrap;
+}
+.pill.reply_today {
+  background: var(--today-soft);
+  color: var(--today);
+}
+.pill.informative {
+  background: var(--info-soft);
+  color: var(--info);
+}
+.pill.newsletter {
+  background: var(--news-soft);
+  color: var(--news);
+}
+.pill.invoice {
+  background: var(--money-soft);
+  color: var(--money);
+}
+
+.muted {
+  color: var(--muted);
+}
+.faint {
+  color: var(--faint);
+}
+.error {
+  color: var(--danger);
+}

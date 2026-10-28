@@ -1,0 +1,104 @@
+{
+ "Qwen2.5-3B-Instruct-Q4_K_M": {
+  "ana": {
+   "no style": {
+    "n": 15,
+    "chrf": 30.77920114106395,
+    "length_ratio_median": 1.1379310344827587,
+    "same_greeting_word": 0.4,
+    "same_last_line": 0.4,
+    "ms_median": 409,
+    "example": {
+     "reply": "Salut Elena,\n\nRămâne joi la 14, am mutat-o în calendar.\n\nMersi,\nAna",
+     "draft": "Elena, pot să mutăm la 14. Multumesc pentru informație. Ana."
+    }
+   },
+   "style description": {
+    "n": 15,
+    "chrf": 37.797889936893704,
+    "length_ratio_median": 1.6,
+    "same_greeting_word": 0.5333333333333333,
+    "same_last_line": 0.8666666666666667,
+    "ms_median": 445,
+    "example": {
+     "reply": "Salut Elena,\n\nRămâne joi la 14, am mutat-o în calendar.\n\nMersi,\nAna",
+     "draft": "Bună ziua Elena,\n\nÎmi place ideea de a muta la 14. Mă întreb dacă vrei să ne întâlnim la 10 sau dacă preferi să ne întâlnim la 14.\n\nMersi,\nAna"
+    }
+   },
+   "3 examples": {
+    "n": 15,
+    "chrf": 39.62601867191767,
+    "length_ratio_median": 1.6111111111111112,
+    "same_greeting_word": 0.8666666666666667,
+    "same_last_line": 0.8666666666666667,
+    "ms_median": 522,
+    "example": {
+     "reply": "Salut Elena,\n\nRămâne joi la 14, am mutat-o în calendar.\n\nMersi,\nAna",
+     "draft": "Bună Elena,\n\nVă pot spune să mutăm la 14. Clientul a cerut o oră mai târzie, deci este mai bine.\n\nMersi,\nAna"
+    }
+   },
+   "style + 3 examples": {
+    "n": 15,
+    "chrf": 37.34980169740999,
+    "length_ratio_median": 1.6111111111111112,
+    "same_greeting_word": 0.6,
+    "same_last_line": 0.9333333333333333,
+    "ms_median": 535,
+    "example": {
+     "reply": "Salut Elena,\n\nRămâne joi la 14, am mutat-o în calendar.\n\nMersi,\nAna",
+     "draft": "Bună ziua Elena,\n\nPuteți să mutați la 14? Am putea să fiu de acord dacă clientul a cerut o oră mai târzie.\n\nMersi,\nAna"
+    }
+   }
+  },
+  "enron": {
+   "no style": {
+    "n": 40,
+    "chrf": 19.531939569066196,
+    "length_ratio_median": 1.0268115942028986,
+    "same_greeting_word": 0.0,
+    "same_last_line": 0.05,
+    "ms_median": 488.5,
+    "example": {
+     "reply": "Thanks for the info.  I voted to get that sucker lowered to 45 and 10,000 of my closest friends are doing the same thing.",
+     "draft": "Hi Shanna,\n\nThanks for the reminder. I've already voted online. Governor Perry's office is open for calls, and I'll give them a shout.\n\nThanks for forwarding this!\n\nChris"
+    }
+   },
+   "style description": {
+    "n": 40,
+    "chrf": 21.41182739556947,
+    "length_ratio_median": 1.095890410958904,
+    "same_greeting_word": 0.0,
+    "same_last_line": 0.025,
+    "ms_median": 521.5,
+    "example": {
+     "reply": "Thanks for the info.  I voted to get that sucker lowered to 45 and 10,000 of my closest friends are doing the same thing.",
+     "draft": "Hi Shanna,\n\nThanks for the reminder to vote. I've already voted for 70 mph. Thanks for forwarding this.\n\nChris"
+    }
+   },
+   "3 examples": {
+    "n": 40,
+    "chrf": 22.71123701673887,
+    "length_ratio_median": 1.0,
+    "same_greeting_word": 0.075,
+    "same_last_line": 0.1,
+    "ms_median": 765.5,
+    "example": {
+     "reply": "Thanks for the info.  I voted to get that sucker lowered to 45 and 10,000 of my closest friends are doing the same thing.",
+     "draft": "Thank you for the reminder to vote. I've already voted online for the 55 mph speed limit. Please forward this to your network as well."
+    }
+   },
+   "style + 3 examples": {
+    "n": 40,
+    "chrf": 19.864162023132423,
+    "length_ratio_median": 0.9434974747474747,
+    "same_greeting_word": 0.025,
+    "same_last_line": 0.1,
+    "ms_median": 665.0,
+    "example": {
+     "reply": "Thanks for the info.  I voted to get that sucker lowered to 45 and 10,000 of my closest friends are doing the same thing.",
+     "draft": "Thank you for the reminder to vote. I've already done so and voted for 55 mph. Please forward this to your network as well."
+    }
+   }
+  }
+ }
+}

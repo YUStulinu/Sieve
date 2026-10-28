@@ -1,0 +1,224 @@
+{
+ "Qwen2.5-3B-Instruct-Q4_K_M": {
+  "threads": 6,
+  "fact_recall": 0.65,
+  "summaries_with_invented_numbers": 0,
+  "language_ok": 1.0,
+  "ms_median": 1802.0,
+  "per_thread": [
+   {
+    "thread": "t1",
+    "facts": 2,
+    "kept": 2,
+    "invented_numbers": [],
+    "language_ok": true,
+    "decisions": 1,
+    "ms": 2224,
+    "summary": {
+     "decisions": [
+      "Ana Popescu acceptă lansarea pe 8 iunie dacă textele vor fi primită pe 20 mai"
+     ],
+     "open_questions": [
+      "Cine va face fotografiile de produs"
+     ],
+     "summary": "Mihai Ionescu și Ana Popescu discută despre lansarea site-ului pe 8 iunie. Andrei Pop a confirmat că textele vor fi primită pe 20 mai. Rămâne de stabilit cine va realiza fotografiile de produs.",
+     "waiting_on": "Mihai Ionescu să stabilească cine face fotografiile de produs"
+    }
+   },
+   {
+    "thread": "t2",
+    "facts": 4,
+    "kept": 1,
+    "invented_numbers": [],
+    "language_ok": true,
+    "decisions": 1,
+    "ms": 2266,
+    "summary": {
+     "decisions": [
+      "Oferta de 465.000 lei a fost aprobată"
+     ],
+     "open_questions": [
+      "Când se încheie votul în ședința de joi?"
+     ],
+     "summary": "Asociația bloc 7 a acordat ofertă de 465.000 lei pentru renovarea fațadei blocului 7. Înainte de votul în ședința de joi, nu se știe când se încheie votul și când începe lucrarea.",
+     "waiting_on": "Asociația bloc 7 să voteze în ședința de joi"
+    }
+   },
+   {
+    "thread": "t3",
+    "facts": 4,
+    "kept": 3,
+    "invented_numbers": [],
+    "language_ok": true,
+    "decisions": 1,
+    "ms": 2185,
+    "summary": {
+     "decisions": [
+      "Bogdan Stan a ales cabana Arnica cu bucătărie pentru 15-17 mai, 1.200 lei, care este 200 lei de persoană."
+     ],
+     "open_questions": [
+      "Câți sunt în excursie?"
+     ],
+     "summary": "Bogdan Stan a ales cabana Arnica cu bucătărie pentru excursie. Ioana Stan a confirmat aceasta. Ana Popescu a confirmat că va participa. În prezent, este nevoie de confirmare a numărului de participanți.",
+     "waiting_on": "Ioana Stan să confirme numărul de participanți"
+    }
+   },
+   {
+    "thread": "t4",
+    "facts": 3,
+    "kept": 3,
+    "invented_numbers": [],
+    "language_ok": true,
+    "decisions": 1,
+    "ms": 1275,
+    "summary": {
+     "decisions": [
+      "Lucy will book the photographer for 5 June."
+     ],
+     "open_questions": [],
+     "summary": "The Northwind brand guidelines are almost ready. The main issue is finding a photographer for a £3,000 shoot by 6 June to fit the 12 June board meeting deadline.",
+     "waiting_on": "Lucy to book the photographer"
+    }
+   },
+   {
+    "thread": "t5",
+    "facts": 4,
+    "kept": 1,
+    "invented_numbers": [],
+    "language_ok": true,
+    "decisions": 0,
+    "ms": 1419,
+    "summary": {
+     "decisions": [],
+     "open_questions": [
+      "Is there a specific HDMI cable or adapter provided?"
+     ],
+     "summary": "Sara Lind confirmed that there will be HDMI and USB-C ports available for the workshop at Fotografiska. Mark Chen inquired about a projector with HDMI. Ana Popescu asked about the cost of her flight, which was covered by Sara Lind.",
+     "waiting_on": "Ana Popescu to confirm if a specific HDMI cable or adapter is provided."
+    }
+   },
+   {
+    "thread": "t6",
+    "facts": 3,
+    "kept": 3,
+    "invented_numbers": [],
+    "language_ok": true,
+    "decisions": 0,
+    "ms": 1246,
+    "summary": {
+     "decisions": [],
+     "open_questions": [],
+     "summary": "The invoice dispute regarding SN-2026-041 is resolved. Tom approved the two extra days for a photo shoot, and James will raise the PO to 12 days and pay on 30 June.",
+     "waiting_on": "James to raise the PO to 12 days"
+    }
+   }
+  ]
+ },
+ "Qwen2.5-7B-Instruct-Q4_K_M": {
+  "threads": 6,
+  "fact_recall": 0.95,
+  "summaries_with_invented_numbers": 1,
+  "language_ok": 1.0,
+  "ms_median": 3191.0,
+  "per_thread": [
+   {
+    "thread": "t1",
+    "facts": 2,
+    "kept": 2,
+    "invented_numbers": [],
+    "language_ok": true,
+    "decisions": 0,
+    "ms": 2933,
+    "summary": {
+     "decisions": [],
+     "open_questions": [
+      "Cine va face fotografiile de produs?"
+     ],
+     "summary": "Site-ul Client Nord va fi lansat pe 8 iunie, înlocuind data inițială de 1 iunie. Textele vor fi finalizate până pe 20 mai de către agenția noastră.",
+     "waiting_on": ""
+    }
+   },
+   {
+    "thread": "t2",
+    "facts": 4,
+    "kept": 4,
+    "invented_numbers": [],
+    "language_ok": true,
+    "decisions": 1,
+    "ms": 4385,
+    "summary": {
+     "decisions": [
+      "Propunerea de 465.000 lei pentru renovarea fațadei a fost alesă, inclusiv schela, cu fiecare apartament plătind aproximativ 9.300 lei în 12 rate."
+     ],
+     "open_questions": [],
+     "summary": "Asociația bloc 7 a ales ofertele de 465.000 lei pentru renovarea fațadei, inclusiv schela. Votul este programat pentru joi, iar lucrarea va începe pe 1 iulie și va dura două luni.",
+     "waiting_on": "Votul în ședința joi pentru a confirma alegerea ofertei."
+    }
+   },
+   {
+    "thread": "t3",
+    "facts": 4,
+    "kept": 3,
+    "invented_numbers": [
+     "2"
+    ],
+    "language_ok": true,
+    "decisions": 1,
+    "ms": 4237,
+    "summary": {
+     "decisions": [
+      "Arnica a fost ales ca locație pentru excursia de la Arieșeni, cu prețul de 1.200 lei pentru 2 nopți, 200 lei de persoană."
+     ],
+     "open_questions": [],
+     "summary": "Excursia de la Arieșeni a fost planificată cu locația Arnica, prețul fiind de 1.200 lei pentru 2 nopți, 200 lei de persoană. Bogdan a cerut că banii fiecarei persoane să fie trimiși până miercuri.",
+     "waiting_on": "Persoanele de căutat să trimită banii până miercuri."
+    }
+   },
+   {
+    "thread": "t4",
+    "facts": 3,
+    "kept": 3,
+    "invented_numbers": [],
+    "language_ok": true,
+    "decisions": 0,
+    "ms": 3342,
+    "summary": {
+     "decisions": [],
+     "open_questions": [],
+     "summary": "Tom Baker requested the brand guidelines be ready by 12 June, with Ana to provide comments by 3 June. Ana agreed and mentioned the board wants a photography section, with Lucy Grant providing a budget of £3,000 for a shoot to be completed by 6 June. Tom Baker has assigned Lucy to book the photographer for 5 June. }",
+     "waiting_on": "Lucy Grant to book the photographer for 5 June."
+    }
+   },
+   {
+    "thread": "t5",
+    "facts": 4,
+    "kept": 4,
+    "invented_numbers": [],
+    "language_ok": true,
+    "decisions": 0,
+    "ms": 2815,
+    "summary": {
+     "decisions": [],
+     "open_questions": [],
+     "summary": "The workshop is scheduled for 18-19 June at Fotografiska, with each speaker getting 90 minutes. The venue provides HDMI and USB-C connections, and flights up to €300 and two hotel nights are covered. Ana's flight is €340, but Sara has agreed to cover the extra cost. }",
+     "waiting_on": ""
+    }
+   },
+   {
+    "thread": "t6",
+    "facts": 3,
+    "kept": 3,
+    "invented_numbers": [],
+    "language_ok": true,
+    "decisions": 0,
+    "ms": 3040,
+    "summary": {
+     "decisions": [],
+     "open_questions": [],
+     "summary": "James and Ana Popescu discussed an invoice dispute regarding SN-2026-041, with Ana providing evidence that Tom approved two extra days for a photo shoot. Tom confirmed the approval, and James agreed to pay for all 12 days in the next payment run on 30 June.",
+     "waiting_on": "James to raise the PO to 12 days and process the payment."
+    }
+   }
+  ]
+ }
+}

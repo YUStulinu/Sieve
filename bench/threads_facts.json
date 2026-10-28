@@ -1,0 +1,65 @@
+{
+ "t1": {
+  "keep": [
+   "8 iunie",
+   "20 mai"
+  ],
+  "decided": [
+   "lansarea se mută pe 8 iunie"
+  ]
+ },
+ "t2": {
+  "keep": [
+   "465.000",
+   "9.300",
+   "1 iulie",
+   "12 rate"
+  ],
+  "decided": [
+   "se propune oferta de 465.000 lei"
+  ]
+ },
+ "t3": {
+  "keep": [
+   "Arnica",
+   "15-17 mai",
+   "200 de lei",
+   "miercuri"
+  ],
+  "decided": [
+   "au ales cabana Arnica"
+  ]
+ },
+ "t4": {
+  "keep": [
+   "12 June",
+   "£3,000",
+   "5 June"
+  ],
+  "decided": [
+   "a photography section is added",
+   "the shoot is on 5 June"
+  ]
+ },
+ "t5": {
+  "keep": [
+   "Fotografiska",
+   "18-19 June",
+   "90 minutes",
+   "€340"
+  ],
+  "decided": [
+   "Ana's €340 flight is covered"
+  ]
+ },
+ "t6": {
+  "keep": [
+   "12 days",
+   "30 June",
+   "Tom"
+  ],
+  "decided": [
+   "all 12 days will be paid"
+  ]
+ }
+}

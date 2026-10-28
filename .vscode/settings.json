@@ -1,0 +1,9 @@
+{
+  "rust-analyzer.cargo.features": [],
+  "python.defaultInterpreterPath": "${workspaceFolder}/eval/.venv/Scripts/python.exe",
+  "python.testing.pytestEnabled": true,
+  "python.testing.cwd": "${workspaceFolder}/eval",
+  "python.testing.pytestArgs": ["tests"],
+  "files.exclude": { "target": true, "app/node_modules": true, "**/__pycache__": true },
+  "search.exclude": { "target": true, "third_party": true, "app/node_modules": true, "app/dist": true, "eval/.venv": true, "eval/work": true }
+}

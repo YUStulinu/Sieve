@@ -221,6 +221,7 @@ Requirements:
 - Node 24;
 - Python 3.14 for the evaluation;
 - Java 21 for the test mail server;
+- on Linux, `libdbus-1-dev` and `pkg-config` (the keyring uses the Secret Service);
 - a GGUF model. Qwen2.5-7B-Instruct Q4_K_M was best here; the 3B one runs on smaller GPUs.
 
 ```bash

@@ -27,6 +27,9 @@ jobs:
           key: deps-${{ runner.os }}-${{ hashFiles('scripts/fetch-deps.sh') }}
       - name: Format
         run: cargo fmt --check -p sieve-core -p sieved
+      - name: Linux libraries (the keyring talks to the Secret Service over D-Bus)
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y libdbus-1-dev pkg-config
       - name: The test mail server
         run: |
           set -o pipefail
@@ -36,7 +39,11 @@ jobs:
       - name: Tests
         env:
           SIEVE_TEST_IMAP: 127.0.0.1:3143
-        run: cargo test -p sieve-core -p sieved
+        # On failure the errors become an annotation, readable on the run's page.
+        run: |
+          set -o pipefail
+          cargo test -p sieve-core -p sieved 2>&1 | tee test.log || {
+            echo "::error::$(grep -E '^error|panicked|FAILED|failed to run|could not find' test.log | head -8 | tr '\n' ' ')"; exit 1; }
       - name: The command line and the daemon build in release
         run: cargo build --release -p sieved
 

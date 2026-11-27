@@ -1,7 +1,7 @@
 name: Release
 
 # Push a tag like v0.2.0: the command line (sieve) and the daemon (sieved) are built for Windows,
-# Linux and macOS and attached to a GitHub release, with the agent skill.
+# Linux and macOS and attached to a GitHub release.
 on:
   push:
     tags: ["v*"]
@@ -44,7 +44,6 @@ jobs:
           mkdir "$name"
           cp "target/${{ matrix.target }}/release/sieve${{ matrix.ext }}" "target/${{ matrix.target }}/release/sieved${{ matrix.ext }}" "$name/"
           cp README.md LICENSE "$name/"
-          cp -r skill "$name/"
           if [ "$RUNNER_OS" = "Windows" ]; then 7z a "$name.zip" "$name" >/dev/null; else tar czf "$name.tar.gz" "$name"; fi
       - uses: actions/upload-artifact@v4
         with:
@@ -57,12 +56,9 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
       - uses: actions/download-artifact@v4
         with:
           merge-multiple: true
-      - name: The skill on its own
-        run: cd skill && zip -r ../sieve-skill.zip sieve
       - uses: softprops/action-gh-release@v2
         with:
           generate_release_notes: true

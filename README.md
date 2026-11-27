@@ -269,8 +269,8 @@ the daemon starts the model. Add your account in Settings. For Gmail or Outlook,
 
 ### From an AI agent (Claude Code, Codex, Cursor)
 
-[skill/sieve/SKILL.md](skill/sieve/SKILL.md) lets an agent read your triaged inbox through the
-`sieve` command line. It can answer questions like these:
+The [Sieve Inbox Triage skill](https://agensi.io/skills/sieve-inbox-triage) on Agensi lets an agent
+read your triaged inbox through the `sieve` command line. It can answer questions like these:
 - "what needs a reply today?"
 - "who hasn't answered me?"
 - "find the thread about the contract"
@@ -287,7 +287,7 @@ sieve search "contract renewal"
 sieve followups --status waiting
 ```
 
-1. Install the skill. For Claude Code, copy `skill/sieve` to `~/.claude/skills/sieve`.
+1. Get the skill from Agensi.
 2. Put `sieve` on your `PATH`. Each [release](https://github.com/YUStulinu/Sieve/releases) has `sieve`
    and `sieved` built for Windows, Linux and macOS. The model server comes from
    [llama.cpp's releases](https://github.com/ggml-org/llama.cpp/releases).

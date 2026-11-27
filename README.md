@@ -13,7 +13,7 @@ is sent unless you confirm it.
 
 | Inbox | A draft in your style | Sending needs your confirmation |
 |---|---|---|
-| ![Inbox](docs/inbox.png) | ![Draft](docs/draft.png) | ![Confirm](docs/confirm.png) |
+| ![Inbox](docs/screenshots/inbox.png) | ![Draft](docs/screenshots/draft.png) | ![Confirm](docs/screenshots/confirm.png) |
 
 ## How it works
 

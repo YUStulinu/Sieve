@@ -12,7 +12,7 @@ use axum::{Json, Router};
 use serde::Deserialize;
 use serde_json::{Value, json};
 use sieve_core::model::Category;
-use sieve_core::store::{Account, now};
+use sieve_core::store::{Account, Store, now};
 use sieve_core::{drafts, imap_sync, send, style, summary};
 use tower_http::cors::CorsLayer;
 
@@ -91,7 +91,8 @@ fn constant_eq(a: &str, b: &str) -> bool {
     a.len() == b.len() && a.bytes().zip(b.bytes()).fold(0u8, |acc, (x, y)| acc | (x ^ y)) == 0
 }
 
-fn brief(m: &sieve_core::Message) -> Value {
+/// A message in a list: what the app and the command line show, without the whole text.
+pub fn brief(m: &sieve_core::Message) -> Value {
     json!({
         "id": m.id, "thread_id": m.thread_id, "from": m.from_addr, "from_name": m.from_name, "to": m.to, "cc": m.cc,
         "subject": m.subject, "date": m.date, "lang": m.lang, "seen": m.seen, "outgoing": m.outgoing,
@@ -113,11 +114,11 @@ struct InboxQ {
     limit: Option<usize>,
 }
 
-async fn inbox(AxState(s): AxState<S>, Query(q): Query<InboxQ>) -> R {
-    let cat = q.category.as_deref().and_then(Category::parse);
-    let rows = blocking(move || s.store.lock().unwrap().inbox(cat, q.limit.unwrap_or(200))).await?;
-    Ok(Json(json!(
-        rows.into_iter()
+/// The triaged inbox, newest first (shared by the app and the command line).
+pub fn inbox_view(st: &Store, category: Option<Category>, limit: usize) -> anyhow::Result<Value> {
+    Ok(json!(
+        st.inbox(category, limit)?
+            .into_iter()
             .map(|(m, t, l)| {
                 let mut b = brief(&m);
                 b["category"] = json!(t.as_ref().map(|t| t.category));
@@ -126,7 +127,46 @@ async fn inbox(AxState(s): AxState<S>, Query(q): Query<InboxQ>) -> R {
                 b
             })
             .collect::<Vec<_>>()
-    )))
+    ))
+}
+
+/// One message with its thread, summary, drafts and triage.
+pub fn message_view(st: &Store, id: i64) -> anyhow::Result<Value> {
+    let m = st.message(id)?.ok_or_else(|| anyhow::anyhow!("no message {id}"))?;
+    let thread = st.thread(&m.thread_id)?;
+    let summary = st.summary(&m.thread_id)?;
+    let drafts = st.drafts_for(id)?;
+    let (t, l) = st.triage_of(id)?;
+    Ok(json!({
+        "message": m,
+        "thread": thread.iter().map(|t| json!({"brief": brief(t), "body": t.body})).collect::<Vec<_>>(),
+        "summary": summary.map(|(n, v)| json!({"messages": n, "summary": v})),
+        "drafts": drafts,
+        "category": t.as_ref().map(|t| t.category),
+        "reason": t.map(|t| t.reason),
+        "label": l,
+    }))
+}
+
+/// Follow-ups, soonest due first, each marked overdue or not.
+pub fn followups_view(st: &Store, status: Option<&str>) -> anyhow::Result<Value> {
+    let t = now();
+    Ok(json!(
+        st.followups(status)?
+            .into_iter()
+            .map(|f| {
+                let due = f.status == "waiting" && f.due <= t;
+                let mut v = json!(f);
+                v["overdue"] = json!(due);
+                v
+            })
+            .collect::<Vec<_>>()
+    ))
+}
+
+async fn inbox(AxState(s): AxState<S>, Query(q): Query<InboxQ>) -> R {
+    let cat = q.category.as_deref().and_then(Category::parse);
+    Ok(Json(blocking(move || inbox_view(&s.store.lock().unwrap(), cat, q.limit.unwrap_or(200))).await?))
 }
 
 #[derive(Deserialize)]
@@ -140,24 +180,7 @@ async fn search(AxState(s): AxState<S>, Query(q): Query<SearchQ>) -> R {
 }
 
 async fn message(AxState(s): AxState<S>, Path(id): Path<i64>) -> R {
-    blocking(move || {
-        let st = s.store.lock().unwrap();
-        let m = st.message(id)?.ok_or_else(|| anyhow::anyhow!("no message {id}"))?;
-        let thread = st.thread(&m.thread_id)?;
-        let summary = st.summary(&m.thread_id)?;
-        let drafts = st.drafts_for(id)?;
-        let triage = st.inbox(None, 100_000)?.into_iter().find(|(x, _, _)| x.id == id).and_then(|(_, t, l)| Some((t, l)));
-        Ok(Json(json!({
-            "message": m,
-            "thread": thread.iter().map(|t| json!({"brief": brief(t), "body": t.body})).collect::<Vec<_>>(),
-            "summary": summary.map(|(n, v)| json!({"messages": n, "summary": v})),
-            "drafts": drafts,
-            "category": triage.as_ref().and_then(|(t, _)| t.as_ref().map(|t| t.category)),
-            "reason": triage.as_ref().and_then(|(t, _)| t.as_ref().map(|t| t.reason.clone())),
-            "label": triage.and_then(|(_, l)| l),
-        })))
-    })
-    .await
+    Ok(Json(blocking(move || message_view(&s.store.lock().unwrap(), id)).await?))
 }
 
 #[derive(Deserialize)]
@@ -272,18 +295,7 @@ struct FollowQ {
 }
 
 async fn followups(AxState(s): AxState<S>, Query(q): Query<FollowQ>) -> R {
-    let rows = blocking(move || s.store.lock().unwrap().followups(q.status.as_deref())).await?;
-    let t = now();
-    Ok(Json(json!(
-        rows.into_iter()
-            .map(|f| {
-                let due = f.status == "waiting" && f.due <= t;
-                let mut v = json!(f);
-                v["overdue"] = json!(due);
-                v
-            })
-            .collect::<Vec<_>>()
-    )))
+    Ok(Json(blocking(move || followups_view(&s.store.lock().unwrap(), q.status.as_deref())).await?))
 }
 
 #[derive(Deserialize)]

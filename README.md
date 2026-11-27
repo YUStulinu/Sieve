@@ -267,6 +267,34 @@ the daemon starts the model. Add your account in Settings. For Gmail or Outlook,
    SIEVE_PASSWORD=test target/release/sieve-app.exe
    ```
 
+### From an AI agent (Claude Code, Codex, Cursor)
+
+[skill/sieve/SKILL.md](skill/sieve/SKILL.md) lets an agent read your triaged inbox through the
+`sieve` command line. It can answer questions like these:
+- "what needs a reply today?"
+- "who hasn't answered me?"
+- "find the thread about the contract"
+
+The skill only reads. Sending stays in the app, behind your confirmation.
+
+The read commands print JSON:
+
+```bash
+sieve status                                     # counts per pile, follow-ups due
+sieve inbox --category reply_today --json        # one pile (or all, without --category)
+sieve show 42                                    # a message, its thread and summary
+sieve search "contract renewal"
+sieve followups --status waiting
+```
+
+1. Install the skill. For Claude Code, copy `skill/sieve` to `~/.claude/skills/sieve`.
+2. Put `sieve` on your `PATH`. Each [release](https://github.com/YUStulinu/Sieve/releases) has `sieve`
+   and `sieved` built for Windows, Linux and macOS. The model server comes from
+   [llama.cpp's releases](https://github.com/ggml-org/llama.cpp/releases).
+
+Sieve itself keeps your mail on this computer. What the agent reads goes to the model the agent
+runs on, so the skill tells the agent to say so and to open whole messages only when you ask.
+
 **Running the evaluation:**
 
 ```bash

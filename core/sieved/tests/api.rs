@@ -120,6 +120,10 @@ async fn the_api_needs_the_token_and_never_sends_unconfirmed() {
     assert_eq!(r.status(), 400);
     let detail: Value = get(&format!("/api/messages/{id}")).send().await.unwrap().json().await.unwrap();
     assert_eq!(detail["drafts"][0]["status"], "proposed");
+    // The message view carries its own triage and label.
+    assert_eq!(detail["category"], "reply_today");
+    assert_eq!(detail["reason"], "r");
+    assert_eq!(detail["label"], "reply_today");
 
     // Accounts never come back with a password.
     let accounts: Value = get("/api/accounts").send().await.unwrap().json().await.unwrap();

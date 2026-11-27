@@ -447,6 +447,29 @@ impl Store {
         Ok(())
     }
 
+    /// One message's triage and your label, if any.
+    pub fn triage_of(&self, message_id: i64) -> Result<(Option<Triage>, Option<Category>)> {
+        let t = self
+            .db
+            .query_row("SELECT category, reason, model, prompt, ms FROM triage WHERE message_id = ?1", [message_id], |r| {
+                Ok(Triage {
+                    message_id,
+                    category: Category::parse(&r.get::<_, String>(0)?).unwrap_or(Category::Informative),
+                    reason: r.get(1)?,
+                    model: r.get(2)?,
+                    prompt: r.get(3)?,
+                    ms: r.get::<_, i64>(4)? as u64,
+                })
+            })
+            .optional()?;
+        let l = self
+            .db
+            .query_row("SELECT category FROM labels WHERE message_id = ?1", [message_id], |r| r.get::<_, String>(0))
+            .optional()?
+            .and_then(|c| Category::parse(&c));
+        Ok((t, l))
+    }
+
     pub fn set_label(&self, message_id: i64, c: Option<Category>) -> Result<()> {
         match c {
             Some(c) => self.db.execute(

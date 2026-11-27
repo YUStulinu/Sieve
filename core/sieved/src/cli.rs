@@ -17,8 +17,8 @@ use sieve_core::model::Category;
 use sieve_core::store::{Account, Store};
 use sieve_core::triage::{self, TriagePrompt};
 use sieve_core::{followup, imap_sync, style, summary};
-use sieved::daemon;
 use sieved::jsonl::{self, Record};
+use sieved::{api, daemon};
 
 #[derive(Parser)]
 #[command(name = "sieve", about = "Sieve: local inbox triage")]
@@ -59,13 +59,33 @@ enum Cmd {
     Accounts,
     /// One round of what the daemon does: sync, triage, follow-ups, summaries.
     Once,
-    /// The triaged inbox.
+    /// The triaged inbox, newest first.
     Inbox {
+        /// reply_today, informative, newsletter or invoice
         #[arg(long)]
         category: Option<String>,
         #[arg(long, default_value_t = 30)]
         limit: usize,
+        /// JSON instead of a table (for scripts and AI agents).
+        #[arg(long)]
+        json: bool,
     },
+    /// One message with its thread, the thread's summary, its triage and any drafts (JSON).
+    Show { id: i64 },
+    /// Full-text search over all synced mail (JSON).
+    Search {
+        query: String,
+        #[arg(long, default_value_t = 20)]
+        limit: usize,
+    },
+    /// Messages you sent that are still waiting for an answer (JSON).
+    Followups {
+        /// waiting, replied or dismissed (default: all)
+        #[arg(long)]
+        status: Option<String>,
+    },
+    /// How many messages are in each pile, and how many follow-ups are due (JSON).
+    Status,
     /// Triage of JSON-lines messages (evaluation).
     Classify {
         #[arg(long)]
@@ -126,6 +146,15 @@ enum Cmd {
         #[arg(long)]
         output: PathBuf,
     },
+}
+
+/// The daemon's database. Reading commands refuse to create an empty one where none exists.
+fn open_store(dir: &std::path::Path) -> Result<Store> {
+    let db = dir.join("sieve.db");
+    if !db.exists() {
+        bail!("no mail synced yet in {}: add an account (sieve add-account) and start sieved", dir.display());
+    }
+    Store::open(&db)
 }
 
 fn model(url: &Option<String>, cfg: &Config) -> Arc<LlamaServer> {
@@ -204,14 +233,34 @@ fn main() -> Result<()> {
                 )?
             );
         }
-        Cmd::Inbox { category, limit } => {
-            let st = Store::open(&dir.join("sieve.db"))?;
-            for (m, t, _) in st.inbox(category.as_deref().and_then(Category::parse), limit)? {
-                let c = t.map(|t| t.category.as_str()).unwrap_or("-");
-                let when = chrono::DateTime::from_timestamp(m.date, 0).map(|d| d.format("%m-%d %H:%M").to_string()).unwrap_or_default();
-                println!("{when}  {c:<12} {:<28} {}", m.from_addr.chars().take(28).collect::<String>(), m.subject);
+        Cmd::Inbox { category, limit, json } => {
+            let category = match category.as_deref() {
+                None => None,
+                Some(c) => Some(
+                    Category::parse(c)
+                        .with_context(|| format!("unknown category {c}: use reply_today, informative, newsletter or invoice"))?,
+                ),
+            };
+            let st = open_store(&dir)?;
+            if json {
+                println!("{}", serde_json::to_string_pretty(&api::inbox_view(&st, category, limit)?)?);
+            } else {
+                for (m, t, _) in st.inbox(category, limit)? {
+                    let c = t.map(|t| t.category.as_str()).unwrap_or("-");
+                    let when = chrono::DateTime::from_timestamp(m.date, 0).map(|d| d.format("%m-%d %H:%M").to_string()).unwrap_or_default();
+                    println!("{:>6}  {when}  {c:<12} {:<28} {}", m.id, m.from_addr.chars().take(28).collect::<String>(), m.subject);
+                }
             }
         }
+        Cmd::Show { id } => println!("{}", serde_json::to_string_pretty(&api::message_view(&open_store(&dir)?, id)?)?),
+        Cmd::Search { query, limit } => {
+            let rows = open_store(&dir)?.search(&query, limit)?;
+            println!("{}", serde_json::to_string_pretty(&rows.iter().map(api::brief).collect::<Vec<_>>())?);
+        }
+        Cmd::Followups { status } => {
+            println!("{}", serde_json::to_string_pretty(&api::followups_view(&open_store(&dir)?, status.as_deref())?)?)
+        }
+        Cmd::Status => println!("{}", serde_json::to_string_pretty(&open_store(&dir)?.counts()?)?),
         Cmd::Classify { input, output, system, no_reason_first, no_hints, body_chars, name } => {
             let m = model(&cli.url, &cfg);
             let p = TriagePrompt {
